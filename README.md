@@ -9,8 +9,8 @@ Running this tool will listen on 127.0.0.1 port 8080 and the only thing is to pr
 
 # Information Source
 
-https://peeringdb.com/
-https://bgp.potaroo.net/
+* https://peeringdb.com/
+* https://bgp.potaroo.net/
 
 # Installation
 
