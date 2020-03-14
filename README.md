@@ -5,8 +5,8 @@ asnChecker is a tool to get information of the autonoumous system which you're i
 # Description
 
 Running this tool will listen on 127.0.0.1 port 8080 and the only thing is to provide AS number to asn parameter to asnchecker and event. 
->Example: http://127.0.0.1:8080/asnchecker?asn=15169
->Example: http://127.0.0.1:8080/event?asn=15169
+> - Example: http://127.0.0.1:8080/asnchecker?asn=15169
+> - Example: http://127.0.0.1:8080/event?asn=15169
 
 # Information Source
 
