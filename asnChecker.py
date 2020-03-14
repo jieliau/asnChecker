@@ -82,13 +82,38 @@ def asNumberChecker(as_number):
 
     return name, website, country, supportIPv6, supportMulticast, pocs, ixes, facs, ases, prefixes
 
+def check_event(as_number):
+    r = requests.get("https://bgpstream.com/")
+    html_str = r.text
+    soup = BeautifulSoup(html_str, features="html.parser")
+    events = [i.text.strip(' ') for i in soup.select(".event_type")]
+    asn = [i.text.strip().replace("\n", '.') for i in soup.select(".asn")]
+    bgphijacks = list()
+    bgpleaks = list()
+    outages = list()
+    for i in range(len(events)):
+        if events[i] == 'Possible Hijack':
+            if 'AS ' + str(as_number) in asn[i]:
+                bgphijacks.append(asn[i])
+        if events[i] == 'Outage':
+            if 'AS ' + str(as_number) in asn[i]:
+                outages.append(asn[i])
+        if events[i] == 'BGP Leak':
+            if 'AS ' + str(as_number) in asn[i]:
+                bgpleaks.append(asn[i])
+    return bgphijacks, bgpleaks, outages
+
 def main():
     app = Flask(__name__)
     app.config['DEBUG'] = True
     
     @app.route("/", methods=['GET'])
     def root():
-        return "<h1>Open browser and connect to http://127.0.0.1:8080/asnchecker?asn=[your AS number]</h1>"
+        return ''' <h1>Check Autonomous System Information<br> 
+        Connect to http://127.0.0.1:8080/asnchecker?asn=[your AS number]
+        <br><br>
+        Check if you AS is under event<br>
+        Connect to http://127.0.0.1:8080/event?asn=[you AS number]</h1> '''
     
     @app.route("/asnchecker", methods=['GET'])
     def asn():
@@ -115,10 +140,30 @@ def main():
         else:
             return "<h1>You have to provide AS number. http://127.0.0.1:8080/asnchecker?asn=[your AS number]</h1>"
 
+    @app.route("/event", methods=['GET'])
+    def event():
+        if 'asn' in request.args:
+            asn = request.args.get('asn')
+            try:
+                int(asn)
+                bgphijacks, bgpleaks, outages = check_event(asn)
+                results = {
+                    "AS Number": asn,
+                    "Possible BGP Hijack": bgphijacks,
+                    "BGP Leak": bgpleaks,
+                    "Outage": outages
+                }
+                return jsonify(results)
+            except ValueError:
+                return "<h1>You use the wrong AS number format. Integer</h1>"
+        else:
+            return "<h1>You have to provide AS number. http://127.0.0.1:8080/event?asn=[your AS number]</h1>"
+
     app.run(host="127.0.0.1", port="8080")
 
 if __name__ == '__main__':
     if os.path.isfile("./net.json") == False:
+        print("Downloading...")
         r = requests.get("https://peeringdb.com/api/net")
         with open("./net.json", "w") as outfile:
             json.dump(r.json(), outfile)

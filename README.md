@@ -11,6 +11,7 @@ Running this tool will listen on 127.0.0.1 port 8080 and the only thing is to pr
 
 * https://peeringdb.com/
 * https://bgp.potaroo.net/
+* https://bgpstream.com/
 
 # Installation
 
@@ -30,4 +31,8 @@ $ * Debugger PIN: 328-083-063
 
 # Docker
 
-It's on the way go
+```sh
+$ docker run -t -d -p8080:8080 jieliau/asnchecker
+```
+
+And connect to http://127.0.0.1:8080
