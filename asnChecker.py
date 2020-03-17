@@ -159,7 +159,7 @@ def main():
         else:
             return "<h1>You have to provide AS number. http://127.0.0.1:8080/event?asn=[your AS number]</h1>"
 
-    app.run(host="127.0.0.1", port="8080")
+    app.run(host="127.0.0.1", port=8080)
 
 if __name__ == '__main__':
     if os.path.isfile("./net.json") == False:
