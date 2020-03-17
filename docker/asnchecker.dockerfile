@@ -7,4 +7,3 @@ RUN tar -zxvf /asnchecker.tar.gz
 RUN pip3 install -r /asnchecker/requirements.txt
 
 ENTRYPOINT ["sh", "/entrypoint.sh"]
-

@@ -131,7 +131,7 @@ def main():
                     "Point Of Contacts": pocs,
                     "Public Peering Exchanges Points": ixes,
                     "Private Peering Facilities": facs,
-                    "Adjancy ASes": ases,
+                    "Adjacency ASes": ases,
                     "Prefixes": prefixes
                 }
                 return jsonify(results)
